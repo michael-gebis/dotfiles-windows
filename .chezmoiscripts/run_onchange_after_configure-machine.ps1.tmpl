@@ -1,0 +1,33 @@
+{{/* Bridge script: chezmoi's analog of `yadm bootstrap` running the Ansible playbook. */ -}}
+{{/* run_onchange_ => re-runs whenever this script's rendered content changes. The hash */ -}}
+{{/* of setup.dsc.yaml is embedded below, so editing the DSC YAML changes this content   */ -}}
+{{/* and re-triggers `winget configure` on the next `chezmoi apply`.                       */ -}}
+{{/* after_ => runs after chezmoi has written all files, so ~/.config/winget/setup.dsc.yaml */ -}}
+{{/* is already on disk when this runs.                                                     */ -}}
+#
+# setup.dsc.yaml hash: {{ include "dot_config/winget/setup.dsc.yaml" | sha256sum }}
+#
+$ErrorActionPreference = 'Stop'
+
+$setup = Join-Path $env:USERPROFILE '.config\winget\setup.dsc.yaml'
+Write-Host "==> Applying machine configuration: $setup"
+winget configure -f $setup --accept-configuration-agreements
+if ($LASTEXITCODE -ne 0) {
+    throw "winget configure failed for setup.dsc.yaml (exit $LASTEXITCODE)"
+}
+
+# Untracked, machine-local escape hatch (analog of the Ubuntu local.yml include).
+# Because it is NOT tracked by chezmoi, editing it does NOT re-trigger this script;
+# use the Update-Machine profile function for the manual re-run loop.
+$local = Join-Path $env:USERPROFILE '.config\winget\local.dsc.yaml'
+if (Test-Path $local) {
+    Write-Host "==> Applying machine-local configuration: $local"
+    winget configure -f $local --accept-configuration-agreements
+    if ($LASTEXITCODE -ne 0) {
+        throw "winget configure failed for local.dsc.yaml (exit $LASTEXITCODE)"
+    }
+} else {
+    Write-Host "==> No local.dsc.yaml present; skipping machine-local layer."
+}
+
+Write-Host "==> Machine configuration complete."

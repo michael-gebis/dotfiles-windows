@@ -1,0 +1,6 @@
+[user]
+	email = mike.gebis@gmail.com
+	name = Michael Gebis
+[core]
+	# Use Windows OpenSSH so git shares the ssh-agent service (Phase 4).
+	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
