@@ -1,6 +1,6 @@
 # dotfiles-windows — package selection record
 
-**Date locked:** 2026-06-09 (gh, WinSCP, Sysinternals, Acrobat added 2026-06-10)
+**Date locked:** 2026-06-09 (gh, WinSCP, Sysinternals, Acrobat added 2026-06-10; USBDeview added 2026-07-17)
 **Purpose:** Decision log for what `setup.dsc.yaml` declares. Revisit and promote
 skipped items anytime; the YAML is the source of truth for what is installed.
 
@@ -12,9 +12,9 @@ skipped items anytime; the YAML is the source of truth for what is installed.
   machine-specific software are excluded by policy.
 - Machine-specific apps (e.g. PrusaSlicer) go in the untracked per-machine **`local.dsc.yaml`**,
   not the shared `setup.dsc.yaml`.
-- `.gitconfig` tracked as-is, plus `core.sshCommand` pointed at Windows OpenSSH.
+- `.gitconfig` tracked as-is, plus `core.sshCommand` pointed at Windows OpenSSH and the gh CLI credential helpers.
 
-## ✅ INCLUDED — 31 packages
+## ✅ INCLUDED — 32 packages
 
 ### Core dev / shell
 | ID | Notes |
@@ -44,6 +44,11 @@ skipped items anytime; the YAML is the source of truth for what is installed.
 | `WiresharkFoundation.Wireshark` | |
 | `Rclone.Rclone` | |
 | `WinSCP.WinSCP` | winget build (the Store/MSIX copy on the first box is redundant) |
+
+### System utilities (NirSoft)
+| ID | Notes |
+|---|---|
+| `NirSoft.USBDeview` | USB device history/enumeration. NirSoft ships portable zips, but the tools are published on winget under the `NirSoft.*` publisher, so they fit the DSC as ordinary `WinGetPackage` resources — add more here as wanted. |
 
 ### Personal / media
 | ID | Notes |

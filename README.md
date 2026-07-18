@@ -37,9 +37,11 @@ updates/reboots can interrupt a long first run — just re-run `chezmoi apply`
 wsl --install -d Ubuntu
 ```
 
-> First-run prerequisite chezmoi handles for you on apply: scripts need a
-> non-Restricted execution policy. If a fresh box blocks scripts, run once:
-> `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+> First-run scripts need a non-Restricted execution policy — and chezmoi
+> handles it: `.chezmoi.toml.tmpl` sets the `.ps1` interpreter to
+> `powershell -ExecutionPolicy Bypass`, so `chezmoi init --apply` works even on
+> a box whose policy is the default Restricted. Fallback, only if scripts still
+> refuse to run: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
 >
 > Day-zero uses **HTTPS** (no SSH key yet). Switch the remote to SSH later:
 > `chezmoi git -- remote set-url origin git@github.com:michael-gebis/dotfiles-windows.git`
@@ -54,7 +56,18 @@ wsl --install -d Ubuntu
   toolchain). Source of truth for what's installed; see the file for the grouped list.
 - **`.chezmoiscripts/...configure-machine.ps1.tmpl`** — the bridge script. Embeds the
   DSC file's hash so editing the YAML re-triggers `winget configure` on next apply.
-- **`dot_gitconfig`** — identity + `core.sshCommand` pointed at Windows OpenSSH.
+- **`.chezmoiscripts/...configure-claude-statusline.ps1`** — a second `run_onchange`
+  script that sets the `statusLine` key in `~/.claude/settings.json` to the tracked
+  status script (below), leaving keys Claude Code manages itself untouched.
+- **`dot_claude/statusline-command.ps1`** — Claude Code status line, a PowerShell port
+  of the bash version in the Ubuntu dotfiles repo: context %, 5-hour rate limit + reset,
+  host, cwd, git branch, model, effort. No `jq`/bash — uses `ConvertFrom-Json`.
+- **`.chezmoi.toml.tmpl`** — generates `chezmoi.toml` on `chezmoi init`, setting the
+  `.ps1` interpreter to `powershell -ExecutionPolicy Bypass` so scripts run under a
+  Restricted policy and before pwsh 7 is installed (uses Windows PowerShell 5.1, always
+  present — hence scripts here stay 5.1-compatible).
+- **`dot_gitconfig`** — identity, `core.sshCommand` pointed at Windows OpenSSH, and the
+  GitHub CLI credential helpers.
 - **Windows Terminal `settings.json`** — tracked at the Store-install path.
 
 ## How it works
@@ -67,6 +80,10 @@ manifest count as a change. So:
 - Nothing drifted → `chezmoi apply` is a silent no-op; the bridge script does not run.
 - You edited the DSC YAML → apply re-runs `winget configure` (idempotent: installs
   what's missing, upgrades what's behind, leaves the rest alone).
+
+The Claude statusline script is the other `run_onchange` script and works the same way:
+it re-runs only when its own content changes, and rewrites just the `statusLine` key in
+`~/.claude/settings.json` so nothing else in that file is disturbed.
 
 ## Updating / re-running
 
