@@ -1,0 +1,12 @@
+# chezmoi configuration -- generated from this template on `chezmoi init`.
+#
+# Run .ps1 scripts (notably the run_onchange bridge that calls `winget
+# configure`) through Windows PowerShell with -ExecutionPolicy Bypass, so a
+# machine whose policy is Restricted still applies cleanly.
+#
+# Deliberately `powershell` (Windows PowerShell 5.1, always present) rather
+# than `pwsh`: on a clean box pwsh does not exist yet when this script first
+# runs -- the DSC installs Microsoft.PowerShell *afterward* (chicken/egg).
+[interpreters.ps1]
+    command = "powershell"
+    args = ["-NoProfile", "-ExecutionPolicy", "Bypass"]
