@@ -174,3 +174,13 @@ properties:
       id: googledrive
       directives: { description: Google Drive }
       settings: { id: Google.GoogleDrive, source: winget }
+
+    # --- NirSoft utilities ------------------------------------------------
+    # NirSoft ships portable zips, but the tools are also published on winget
+    # under the NirSoft.* publisher (`winget search nirsoft`), so they fit the
+    # same declarative WinGetPackage model as everything else. Add more here
+    # as needed instead of hand-managing zips.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: usbdeview
+      directives: { description: USBDeview (NirSoft) }
+      settings: { id: NirSoft.USBDeview, source: winget }

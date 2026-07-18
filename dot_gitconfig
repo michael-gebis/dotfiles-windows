@@ -4,3 +4,9 @@
 [core]
 	# Use Windows OpenSSH so git shares the ssh-agent service (Phase 4).
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+[credential "https://github.com"]
+	helper = 
+	helper = !'C:\\Program Files\\GitHub CLI\\gh.exe' auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !'C:\\Program Files\\GitHub CLI\\gh.exe' auth git-credential
