@@ -129,6 +129,19 @@ Set-Service ssh-agent -StartupType Automatic
 Start-Service ssh-agent
 ```
 
+## One-time manual step (per machine, GUI) — Google Drive mount
+
+Google Drive for Desktop's mount location is an in-app GUI setting, so chezmoi/DSC can't set it.
+On each machine, mount Drive as a **folder**, not a drive letter:
+
+> Google Drive → tray icon → gear (Settings) → **Preferences** → gear (Settings, top-right) →
+> **"Google Drive streaming location"** → **Folder** → point it at an empty **`C:\gdrive`**.
+
+A folder mount keeps every Drive path stable. A drive-letter mount drifts (`G:` → `H:` → …) whenever
+a USB drive grabs the letter first, which breaks anything that references a fixed Drive path — app
+save-locations and Drive-hosted scripts under `C:\gdrive\My Drive\…`. (If this machine runs the
+ScanSnap scanner, also point its save folder at `C:\gdrive\My Drive\Scanned`.)
+
 ## Notes / gotchas
 
 - **The Ubuntu WSL distro is a manual step.** `setup.dsc.yaml` installs `Microsoft.WSL`
