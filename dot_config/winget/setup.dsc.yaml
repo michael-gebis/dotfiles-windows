@@ -125,6 +125,11 @@ properties:
 
     # --- Files / media ----------------------------------------------------
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: sevenzip
+      directives: { description: 7-Zip }
+      settings: { id: 7zip.7zip, source: winget }
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: teracopy
       directives: { description: TeraCopy }
       settings: { id: CodeSector.TeraCopy, source: winget }

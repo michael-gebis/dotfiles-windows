@@ -1,6 +1,6 @@
 # dotfiles-windows — package selection record
 
-**Date locked:** 2026-06-09 (gh, WinSCP, Sysinternals, Acrobat added 2026-06-10; USBDeview added 2026-07-17)
+**Date locked:** 2026-06-09 (gh, WinSCP, Sysinternals, Acrobat added 2026-06-10; USBDeview added 2026-07-17; 7-Zip added 2026-09-08)
 **Purpose:** Decision log for what `setup.dsc.yaml` declares. Revisit and promote
 skipped items anytime; the YAML is the source of truth for what is installed.
 
@@ -14,7 +14,7 @@ skipped items anytime; the YAML is the source of truth for what is installed.
   not the shared `setup.dsc.yaml`.
 - `.gitconfig` tracked as-is, plus `core.sshCommand` pointed at Windows OpenSSH and the gh CLI credential helpers.
 
-## ✅ INCLUDED — 32 packages
+## ✅ INCLUDED — 33 packages
 
 ### Core dev / shell
 | ID | Notes |
@@ -59,6 +59,7 @@ skipped items anytime; the YAML is the source of truth for what is installed.
 | `HandBrake.HandBrake` | |
 | `Google.Chrome.EXE` | EXE variant (matches the installed form) |
 | `Google.GoogleDrive` | |
+| `7zip.7zip` | archiver; was installed by hand and undeclared until this pass |
 | `CodeSector.TeraCopy` | |
 | `AdrienAllard.FileConverter` | |
 | `MoritzBunkus.MKVToolNix` | |
