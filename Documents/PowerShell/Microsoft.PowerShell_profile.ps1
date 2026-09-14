@@ -83,6 +83,13 @@ function Update-Machine {
     if (Test-Path $local) {
         winget configure -f $local --accept-configuration-agreements
     }
+
+    # Package currency. The DSC resources are presence-only (no `useLatest`), so
+    # neither configure pass above will move an already-installed package off its
+    # current version -- taking updates is a separate, explicit step, and this is
+    # it. Hold a package back with `winget pin add <id>`; --all honors pins.
+    Write-Host '==> Upgrading installed packages'
+    winget upgrade --all --accept-source-agreements --accept-package-agreements
 }
 
 # --- Machine-local overrides (untracked; sourced LAST, like ~/.bashrc.local) ---
